@@ -7,7 +7,7 @@ public class Turret : Construct {
     //Fields
     [SerializeField] private Detector _detector;
     [SerializeField] private Transform _base;
-    [SerializeField] private Transform _head;
+    [SerializeField] private TurretHead _head;
     [SerializeField] private Transform _barrel;
 
     [SerializeField] private Enemy _target;
@@ -29,7 +29,7 @@ public class Turret : Construct {
 
     private void TargetUpdate() {
         if (_detector.TryGetEnemy(out _target)) {
-            
+            _head.Target = _target;
         }
     }
 }

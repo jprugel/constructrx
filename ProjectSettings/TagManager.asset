@@ -41,3 +41,12 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Construct
+    uniqueID: 1014429583
+    locked: 0
+  - name: Base
+    uniqueID: 928940371
+    locked: 0
+  - name: Head
+    uniqueID: 3845134401
+    locked: 0

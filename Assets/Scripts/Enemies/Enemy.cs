@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class Enemy : MonoBehaviour, IDamageable {
+public class Enemy : MonoBehaviour, IDamageable, ITargetable {
     //Fields
     [SerializeField] private int _health;
 
@@ -20,4 +20,11 @@ public class Enemy : MonoBehaviour, IDamageable {
         }
     }
     //Methods
+    public Vector3 GetPosition() {
+        return transform.position;
+    }
+
+    public string GetTag() {
+        return tag;
+    }
 }
