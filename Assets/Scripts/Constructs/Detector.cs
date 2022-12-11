@@ -1,11 +1,8 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.Serialization;
 
-[RequireComponent(typeof(CircleCollider2D))]
 public class Detector : MonoBehaviour {
     //Fields
     [SerializeField] private CircleCollider2D _collider2D;
@@ -23,7 +20,7 @@ public class Detector : MonoBehaviour {
     public UnityEvent OnDetectorUpdate;
 
     //MonoBehaviour implementations
-    private void Awake() {
+    public void DetectorAwake() {
         _collider2D.radius = _radius;
         
         OnDetectorUpdate?.Invoke();

@@ -19,17 +19,4 @@ public class Enemy : MonoBehaviour, IDamageable, IDetectable {
             OnEnemyDeath?.Invoke(this);
         }
     }
-    //ITargetable implementations
-
-    public Transform transform {
-        get => transform;
-    }
-
-    public string tag {
-        get => tag;
-    }
-
-    public GameObject gameObject {
-        get => gameObject;
-    }
 }

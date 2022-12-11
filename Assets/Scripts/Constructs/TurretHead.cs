@@ -1,46 +1,58 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Object = System.Object;
+using UnityEngine.Events;
 
 public class TurretHead : MonoBehaviour, IRotatable {
-    //Fields
-    private float _rotationProgress;
+    /*
+     * The goal of this class is to turn towards a target, and let the Construct know when it is aligned
+     */
     
+    //Fields
+    [SerializeField] private Detector _detector;
     [SerializeField] private float _rotationSpeed;
-
-    [SerializeField] private Enemy _target;
-
+    [SerializeField] private float _progress;
+    private Transform _target;
     private bool _aligned;
+
     //Properties
-    public Enemy Target {
-        get => _target;
-        set => _target = value;
-    }
     public bool Aligned {
-        get => _aligned;
+        get => _aligned; 
         set => _aligned = value;
     }
-    //MonoBehaviour implementations
+    
+    //Events
+    public UnityEvent OnAlignment;
 
-    private void Start() {
-        StartCoroutine(RotateTowards());
+    public void TurretHeadAwake() {
+        _detector.OnDetectorUpdate.AddListener(TryRotateTowards);
     }
 
-    //Methods
+    private void TryRotateTowards() {
+        if (_detector.TryGetEnemy(out Enemy enemy)) {
+            _target = enemy.transform;
+            StartCoroutine(RotateTowards());
+        }
+    }
+
     public IEnumerator RotateTowards() {
-       for (;;) {
-            //Create a vector to the target
-            if (Object.ReferenceEquals(_target, null)) yield return null;
-            Vector3 vectorToTarget = _target.transform.position - transform.position;
-            //Convert this to an angle
-            float angle = Mathf.Atan2(vectorToTarget.y, vectorToTarget.x) * Mathf.Rad2Deg;
-            //Rotate around axis
-            Quaternion q = Quaternion.AngleAxis(angle, Vector3.forward);
+        Quaternion startRotation = transform.rotation;
+        Vector3 vectorToTarget = _target.position - transform.position;
+        //Convert this to an angle
+        float angle = Mathf.Atan2(vectorToTarget.y, vectorToTarget.x) * Mathf.Rad2Deg;
+        //Convert the angle to a quaternion
+        Quaternion stopRotation = Quaternion.AngleAxis(angle, Vector3.forward);
+        float timeElapsed = 0f;
+        float maxDuration = 3f;
+        while (_progress < 1f) {
             //Rotate!
-            transform.rotation = Quaternion.Slerp(transform.rotation, q, _rotationSpeed * Time.deltaTime);
+            _progress = timeElapsed / maxDuration;
+            transform.rotation = Quaternion.Slerp(startRotation, stopRotation, _progress);
+            timeElapsed += Time.deltaTime;
             yield return null;
-       }
+        }
+
+        Aligned = true;
+        OnAlignment?.Invoke();
     }
 }

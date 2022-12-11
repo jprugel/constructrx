@@ -22,11 +22,13 @@ public class Turret : Construct {
     //MonoBehaviour implementation
     private void Awake() {
         //Detector Initialization
+        _detector.DetectorAwake();
         _detector.Radius = _range;
         
         _detector.OnDetectorUpdate.AddListener(TargetUpdate);
         
         //Turret Head Initialization
+        _head.TurretHeadAwake();
     }
 
     //Methods
@@ -34,7 +36,6 @@ public class Turret : Construct {
     private void TargetUpdate() {
         if (_detector.TryGetEnemy(out Enemy enemy)) {
             _target = enemy.transform;
-            _head.Target = enemy;
         }
     }
 }
