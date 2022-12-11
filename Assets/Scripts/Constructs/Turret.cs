@@ -10,26 +10,31 @@ public class Turret : Construct {
     [SerializeField] private TurretHead _head;
     [SerializeField] private Transform _barrel;
 
-    [SerializeField] private Enemy _target;
-    
-    
+    [SerializeField] private Transform _target;
+
     [SerializeField] private float _range;
     //Properties
+    public Transform Target {
+        get => _target;
+        set => _target = value;
+    }
+    
     //MonoBehaviour implementation
     private void Awake() {
-        DetectorAwake();
+        //Detector Initialization
+        _detector.Radius = _range;
+        
+        _detector.OnDetectorUpdate.AddListener(TargetUpdate);
+        
+        //Turret Head Initialization
     }
 
     //Methods
-    private void DetectorAwake() {
-        _detector.DetectionRange = _range;
-        
-        _detector.OnEnemiesUpdate.AddListener(TargetUpdate);
-    }
 
     private void TargetUpdate() {
-        if (_detector.TryGetEnemy(out _target)) {
-            _head.Target = _target;
+        if (_detector.TryGetEnemy(out Enemy enemy)) {
+            _target = enemy.transform;
+            _head.Target = enemy;
         }
     }
 }

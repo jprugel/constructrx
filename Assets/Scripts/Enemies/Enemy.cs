@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class Enemy : MonoBehaviour, IDamageable, ITargetable {
+public class Enemy : MonoBehaviour, IDamageable, IDetectable {
     //Fields
     [SerializeField] private int _health;
 
@@ -19,12 +19,17 @@ public class Enemy : MonoBehaviour, IDamageable, ITargetable {
             OnEnemyDeath?.Invoke(this);
         }
     }
-    //Methods
-    public Vector3 GetPosition() {
-        return transform.position;
+    //ITargetable implementations
+
+    public Transform transform {
+        get => transform;
     }
 
-    public string GetTag() {
-        return tag;
+    public string tag {
+        get => tag;
+    }
+
+    public GameObject gameObject {
+        get => gameObject;
     }
 }
