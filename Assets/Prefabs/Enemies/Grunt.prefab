@@ -47,6 +47,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 050a01dced5394c679df973989724a81, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _cost: 1
+  _reward: 1
   _health: 10
   OnEnemyDeath:
     m_PersistentCalls:

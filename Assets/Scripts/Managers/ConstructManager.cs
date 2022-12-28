@@ -9,7 +9,12 @@ public class ConstructManager : MonoBehaviour {
 
     public bool CoreIsBuilt;
 
-    private void Awake() {
+    public List<Construct> Constructs {
+        get => _constructs;
+        set => _constructs = value;
+    }
+
+    public void Awake() {
         CoreIsBuilt = false;
     }
 

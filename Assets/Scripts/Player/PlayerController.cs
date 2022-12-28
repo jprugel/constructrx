@@ -11,22 +11,21 @@ public class PlayerController : MonoBehaviour {
     [SerializeField] private PlayerInput _playerInput;
     [SerializeField] private ConstructManager _constructManager;
 
-    [SerializeField] private Construct _coreConstruct;
+    public Construct Construct;
     private InputAction _buildCore;
 
     private void Awake() {
-        _buildCore = _playerInput.actions["Build Core"];
+        _buildCore = _playerInput.actions["Build Construct"];
         
-        _buildCore.started += BuildCore;
+        _buildCore.started += BuildConstruct;
     }
 
-    private void BuildCore(InputAction.CallbackContext context) {
-        if (_constructManager.CoreIsBuilt) {
-            Debug.Log($"Core is already built!");
-            return;
-        }
-        _constructManager.BuildConstruct(_coreConstruct, _mousePosition);
-        _constructManager.CoreIsBuilt = true;
+    private void BuildConstruct(InputAction.CallbackContext context) {
+        Instantiate(
+            Construct,
+            _mousePosition,
+            Quaternion.identity
+        );
     }
 
     private void Update() {

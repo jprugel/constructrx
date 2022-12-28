@@ -6,7 +6,7 @@
             "id": "4d8dfa27-3fd1-4582-9d5b-15620ac5b565",
             "actions": [
                 {
-                    "name": "Build Core",
+                    "name": "Build Construct",
                     "type": "Button",
                     "id": "8a735bb0-53df-4a1b-99a7-93677588c973",
                     "expectedControlType": "Button",
@@ -23,7 +23,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Build Core",
+                    "action": "Build Construct",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

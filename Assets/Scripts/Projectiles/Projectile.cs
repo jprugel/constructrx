@@ -5,12 +5,12 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour {
     //Fields
-    private Vector3 _startingPosition;
-    private Vector3 _StoppingPosition;
-    private float _projectileProgress;
+    [SerializeField] private Vector3 _startingPosition;
+    [SerializeField] private Vector3 _StoppingPosition;
+    [SerializeField] private float _projectileProgress;
 
     private float _projectileSpeed;
-    private float _projectileDamage;
+    private int _projectileDamage;
 
     private LayerMask _layerMask;
     
@@ -30,7 +30,7 @@ public class Projectile : MonoBehaviour {
         set => _projectileSpeed = value;
     }
 
-    public float ProjectileDamage {
+    public int ProjectileDamage {
         get => _projectileDamage;
         set => _projectileDamage = value;
     }
@@ -41,15 +41,18 @@ public class Projectile : MonoBehaviour {
     }
 
     private void OnCollisionEnter2D(Collision2D col) {
-        throw new NotImplementedException();
+        if (col.collider.TryGetComponent(out IDamageable damageable)) {
+            damageable.RecieveDamage(_projectileDamage);
+            Destroy(gameObject);
+        }
     }
 
     //Methods
     private IEnumerator InterpolatePosition() {
         _projectileProgress = 0f;
-        while (_projectileProgress <= 1f) {
+        while (_projectileProgress < 1f) {
             _projectileProgress += Time.deltaTime * _projectileSpeed;
-            Vector3.Lerp(
+            transform.position = Vector3.Lerp(
                 _startingPosition,
                 _StoppingPosition,
                 _projectileProgress
