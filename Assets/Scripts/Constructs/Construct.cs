@@ -1,112 +1,57 @@
 using System.Collections;
 using System.Collections.Generic;
+using Constructs;
 using UnityEngine;
 
 public class Construct : MonoBehaviour {
     #region Fields
-    
-    [Header("ScriptableObjects")]
-    
-    [SerializeField] private ConstructData _data;
-    [SerializeField] private ConstructStats _stats;
-    
-    [Header("Target Fields")]
-    [ReadOnly] [SerializeField] private string _name;
-    [ReadOnly] [SerializeField] private string _description;
 
-    [Header("References to children")] 
-    [ReadOnly] [SerializeField] private SpriteRenderer _baseSpriteRenderer;
-    [ReadOnly] [SerializeField] private SpriteRenderer _headSpriteRenderer;
+    [Header("Scriptable Objects")] 
+    [SerializeField] private ConstructData _base;
 
-    [Header("Statistic Fields")] 
-    [ReadOnly] [SerializeField] private int _damage;
-    [ReadOnly] [SerializeField] private int _firerate;
-    [ReadOnly] [SerializeField] private int _critChance;
-    [ReadOnly] [SerializeField] private int _critMulti;
-
-    [ReadOnly] [SerializeField] private int _range;
-    [ReadOnly] [SerializeField] private int _speed;
+    [Header("Visual Data")] 
+    [SerializeField] private SpriteRenderer _baseRenderer;
+    [SerializeField] private SpriteRenderer _headRenderer;
+    
+    [Header("Current Statistics")]
+    [ReadOnly] [SerializeField] private ConstructStat _stat;
     
     #endregion Fields
 
     #region Properties
-    public ConstructData Data {
-        get => _data;
+
+    public ConstructData Base {
+        get => _base;
     }
 
-    public ConstructStats Stats {
-        get => _stats;
+    public SpriteRenderer BaseRenderer {
+        get => _baseRenderer;
+        private set => _baseRenderer = value;
     }
 
-    public string Name {
-        get => _name;
-        private set => _name = value;
+    public SpriteRenderer HeadRenderer {
+        get => _headRenderer;
+        private set => _headRenderer = value;
     }
 
-    public string Description {
-        get => _description;
-        private set => _description = value;
-    }
-
-    public SpriteRenderer BaseSpriteRenderer {
-        get => _baseSpriteRenderer;
-        private set => _baseSpriteRenderer = value;
-    }
-
-    public SpriteRenderer HeadSpriteRenderer {
-        get => _headSpriteRenderer;
-        private set => _headSpriteRenderer = value;
-    }
-
-    public int Damage {
-        get => _damage;
-        private set => _damage = value;
-    }
-
-    public int FireRate {
-        get => _firerate;
-        private set => _firerate = value;
-    }
-
-    public int CritChance {
-        get => _critChance;
-        private set => _critChance = value;
-    }
-
-    public int CritMulti {
-        get => _critMulti;
-        private set => _critMulti = value;
-    }
-
-    public int Range {
-        get => _range;
-        private set => _range = value;
-    }
-
-    public int Speed {
-        get => _speed;
-        private set => _speed = value;
+    public ConstructStat Stat {
+        get => _stat;
+        private set => _stat = value;
     }
     
-    #endregion
+    #endregion Properties
 
     private void Start() {
         SetupConstruct();
     }
 
     private void SetupConstruct() {
-        Name = Data.Name;
-        Description = Data.Description;
+        BaseRenderer.sprite = Base.Sprites.Base;
+        BaseRenderer.sortingOrder = 0;
         
-        BaseSpriteRenderer.sprite = Data.BaseSprite;
-        HeadSpriteRenderer.sprite = Data.HeadSprite;
+        HeadRenderer.sprite = Base.Sprites.Head;
+        HeadRenderer.sortingOrder = 1;
 
-        Damage = Stats.ConstructModifiers.Damage;
-        FireRate = Stats.ConstructModifiers.Firerate;
-        CritChance = Stats.ConstructModifiers.CritChance;
-        CritMulti = Stats.ConstructModifiers.CritMulti;
-
-        Range = Stats.ConstructModifiers.Range;
-        Speed = Stats.ConstructModifiers.Speed;
+        Stat = Base.Stat;
     }
 }

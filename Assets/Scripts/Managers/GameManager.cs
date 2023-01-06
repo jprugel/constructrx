@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour {
     [SerializeField] private GameStateManager _gameStateManager;
     [SerializeField] private Director _director;
     [SerializeField] private Constructor _constructor;
+    [SerializeField] private ShopManager _shopManager;
         
     //Properties
     public static GameManager Singleton {
@@ -26,6 +27,10 @@ public class GameManager : MonoBehaviour {
         
     public Constructor Constructor {
         get => _constructor;
+    }
+
+    public ShopManager ShopManager {
+        get => _shopManager;
     }
     
     //MonoBehaviours implementations

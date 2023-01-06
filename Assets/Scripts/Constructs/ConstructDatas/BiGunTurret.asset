@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c5f18ba2dc3f64f3493bd3b8c4246e62, type: 3}
-  m_Name: MonoGunTurretData
+  m_Name: BiGunTurret
   m_EditorClassIdentifier: 
   _sprites:
     _base: {fileID: -167573202, guid: 616f726b928a1490e8c198f7cfd2e037, type: 3}
-    _head: {fileID: 2102825890, guid: 616f726b928a1490e8c198f7cfd2e037, type: 3}
+    _head: {fileID: -1933662940, guid: 616f726b928a1490e8c198f7cfd2e037, type: 3}
   _stat:
     _damage: 0
-  _cost: 10
+  _cost: 15

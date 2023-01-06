@@ -1,34 +1,56 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "constructdata", menuName = "Construct Data")]
-public class ConstructData : ScriptableObject {
-    [SerializeField] private string _name;
-    [SerializeField] private string _description;
+namespace Constructs {
     
-    [SerializeField] private Sprite _baseSprite;
-    [SerializeField] private Sprite _headSprite;
+    #region Construct Data
+    [CreateAssetMenu(fileName = "constructData", menuName = "Construct Data")]
+    public class ConstructData : ScriptableObject {
+        [SerializeField] private ConstructSprites _sprites;
+        [SerializeField] private ConstructStat _stat;
 
-    [SerializeField] private Sprite _projectileSprite;
+        [SerializeField] private int _cost;
 
-    public string Name {
-        get => _name;
+        public ConstructSprites Sprites {
+            get => _sprites;
+        }
+
+        public ConstructStat Stat {
+            get => _stat;
+        }
+
+        public int Cost {
+            get => _cost;
+        }
     }
+    #endregion
 
-    public string Description {
-        get => _description;
-    }
+    #region ConstructStat
+    [Serializable]
+    public class ConstructStat {
+        [SerializeField] private float _damage;
 
-    public Sprite BaseSprite {
-        get => _baseSprite;
+        public float Damage {
+            get => _damage;
+        }
     }
+    #endregion ConstructStat
+    
+    #region ConstructSprites
+    [Serializable]
+    public class ConstructSprites {
+        [SerializeField] private Sprite _base;
+        [SerializeField] private Sprite _head;
 
-    public Sprite HeadSprite {
-        get => _headSprite;
-    }
+        public Sprite Base {
+            get => _base;
+        }
 
-    public Sprite ProjectileSprite {
-        get => _projectileSprite;
+        public Sprite Head {
+            get => _head;
+        }
     }
+    #endregion ConstructSprites
 }
