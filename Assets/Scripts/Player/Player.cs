@@ -3,38 +3,26 @@ using System.Collections;
 using System.Collections.Generic;
 using Library.Inventories;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Player : MonoBehaviour {
-    public static Player Singleton;
-    [SerializeField] private int _currency;
-    [SerializeField] private Storage<ConstructItem> _playerConstructItems;
+    #region Fields
 
-    [SerializeField] private PlayerUI _playerUI;
+    [SerializeField] private Storage<ConstructItem> _constructItems;
 
-    public int Currency {
-        get => _currency;
-        set => _currency = value;
+    #endregion
+
+    #region Properties
+
+    public Storage<ConstructItem> ConstructItems {
+        get => _constructItems;
     }
 
-    public Storage<ConstructItem> PlayerConstructItems {
-        get => _playerConstructItems;
-    }
+    #endregion
 
-    public PlayerUI PlayerUI {
-        get => _playerUI;
-    }
+    #region MonoBehaviour Implementations
+    
+    
 
-    private void Start() {
-        Singleton = this;
-        
-        
-        
-        GameManager.Singleton.Director.OnEnemyDeath.AddListener((enemy) => {
-            Currency += enemy.Reward;
-        });
-        
-        GameManager.Singleton.Director.OnWaveStart.AddListener(() => {
-            Currency += Currency % 10;
-        });
-    }
+    #endregion
 }

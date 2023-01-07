@@ -1,41 +1,60 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Library.Inventories;
 using UnityEngine;
 
 public class PlayerUI : MonoBehaviour {
+
+    #region Reference Fields
+
+    [Header("References")] 
+    [SerializeField] private Player _player;
+    
+    
+    
+
+    #endregion
+
     #region Fields
 
-    [SerializeField] private List<PlayerConstructItem> _playerConstructItems; 
+    [SerializeField] private List<ConstructItem> _constructItems;
+
+    #endregion
+
+    #region Reference Properties
+
+    public Player Player {
+        get => _player;
+    }
 
     #endregion
 
     #region Properties
 
-    public List<PlayerConstructItem> PlayerConstructItems {
-        get => _playerConstructItems;
+    public List<ConstructItem> ConstructItems {
+        get => _constructItems;
     }
 
     #endregion
 
-    #region MonoBehaviour Implementations
-
     private void OnEnable() {
-        Player.Singleton.PlayerConstructItems.OnStorageUpdate += UpdateUI;
+
+        Player.ConstructItems.OnStorageUpdate += UpdateUI;
+
     }
 
     private void OnDisable() {
-        Player.Singleton.PlayerConstructItems.OnStorageUpdate -= UpdateUI;
+
+        Player.ConstructItems.OnStorageUpdate -= UpdateUI;
+
     }
-
-    #endregion
-
-    #region Methods
 
     private void UpdateUI(ConstructItem item) {
-        
+        foreach (ConstructItem constructItem in ConstructItems) {
+            if (ReferenceEquals(constructItem.Data, null)) {
+                constructItem.Initialize(item.Data);
+                return;
+            }
+        }
     }
-
-    #endregion
 }

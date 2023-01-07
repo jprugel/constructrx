@@ -6,72 +6,90 @@ using Library.Inventories;
 using UnityEngine.Events;
 
 public class ShopManager : MonoBehaviour {
-    
-    #region Fields
-    
-    [Header("Construct Item Info")]
-    [SerializeField] private ConstructItem _constructItemPrefab;
-    [SerializeField] private List<RectTransform> _constructItemTargets;
-    [SerializeField] private Canvas _constructItemCanvas;
-    [SerializeField] private Storage<ConstructItem> _constructItems;
 
-    [Header("Price Data")]
-    [SerializeField] private int NumberOfPurchasedItems = 0;
-    [SerializeField] private float CostCoefficient = 1.1f;
-    [SerializeField] private float _priceMultiplier;
-    
-    [Header("Events")]
-    [SerializeField] public UnityEvent OnPurchaseEvent;
-    
+    #region Reference Fields
+
+    [Header("References")] 
+    [SerializeField] private Player _player;
+
     #endregion
 
-    public ConstructItem ConstructItemPrefab {
-        get => _constructItemPrefab;
+    #region Fields
+
+    [SerializeField] private Storage<ConstructItem> _constructItems;
+
+    [ReadOnly] [SerializeField] private int _numberOfItemsPurchased;
+    [SerializeField] private float _priceCoefficient;
+    [ReadOnly] [SerializeField] private float _priceModifier;
+
+    #endregion
+
+    #region Reference Properties
+
+    public Player Player {
+        get => _player;
     }
 
-    public List<RectTransform> ConstructItemTargets {
-        get => _constructItemTargets;
-    }
+    #endregion
 
-    public Canvas ConstructItemCanvas {
-        get => _constructItemCanvas;
-    }
+    #region Properties
 
     public Storage<ConstructItem> ConstructItems {
         get => _constructItems;
-        private set => _constructItems = value;
     }
 
-    public float PriceMultiplier {
-        get => _priceMultiplier;
-        private set => _priceMultiplier = value;
+    public int NumberOfItemsPurchased {
+        get => _numberOfItemsPurchased;
+        private set => _numberOfItemsPurchased = value;
     }
+
+    public float PriceCoefficient {
+        get => _priceCoefficient;
+    }
+
+    public float PriceModifier {
+        get => _priceModifier;
+        private set => _priceModifier = Mathf.Clamp(value, 0f, float.MaxValue);
+    }
+
+    #endregion
+
+    #region Events
+
+    public UnityEvent OnPurchaseEvent;
+
+    #endregion
+
+    #region MonoBehaviour Implementations
 
     private void Start() {
-        PriceMultiplier = 1 + (NumberOfPurchasedItems * CostCoefficient);
+        PriceModifier = 1 + NumberOfItemsPurchased * PriceCoefficient;
         
-        GenerateConstructItems();
-    }
-
-    private void GenerateConstructItems() {
-        for (int i = 0; i < ConstructItemTargets.Count; i++) {
-            ConstructItem item = Instantiate(
-                ConstructItemPrefab,
-                ConstructItemTargets[i].position,
-                Quaternion.identity,
-                ConstructItemCanvas.transform
+        foreach (ConstructItem item in ConstructItems) {
+            item.Initialize(
+                GameManager.Singleton.Constructor.RandomConstructData()
             );
-
-            ConstructItems.AddStorable(
-                item
-            );
-
-            item.OnPurchaseConstructItem.AddListener((data) => {
-                ConstructItems.TransferStorable(Player.Singleton.PlayerConstructItems, data);
-
-                NumberOfPurchasedItems++;
-                PriceMultiplier = 1 + (NumberOfPurchasedItems * CostCoefficient);
-            });
         }
     }
+
+    #endregion
+
+    #region Methods
+
+    public void PurchaseItem(Item item) {
+        NumberOfItemsPurchased++;
+        PriceModifier = 1 + NumberOfItemsPurchased * PriceCoefficient;
+
+        if (item is ConstructItem) {
+            ConstructItems.TransferStorable(Player.ConstructItems, (ConstructItem) item);
+            ConstructItem citem = (ConstructItem)item;
+            citem.Initialize(
+                GameManager.Singleton.Constructor.RandomConstructData()
+            );
+        }
+
+        OnPurchaseEvent?.Invoke();
+    }
+
+    #endregion
 }

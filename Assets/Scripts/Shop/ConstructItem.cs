@@ -2,36 +2,26 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
+
 using Constructs;
-using Library.Inventories;
-using TMPro;
 using UnityEngine.Events;
-using Random = UnityEngine.Random;
 
-
-public class ConstructItem : MonoBehaviour, IStorable {
+public class ConstructItem : Item {
+    
     #region Fields
 
-    [ReadOnly] [SerializeField] private ConstructData _targetConstructData;
+    [ReadOnly] [SerializeField] private ConstructData _data;
 
     [SerializeField] private SpriteRenderer _baseRenderer;
     [SerializeField] private SpriteRenderer _headRenderer;
-    [SerializeField] private TextMeshProUGUI _costText;
-
-    [SerializeField] private Button _purchaseButton;
-
-    [SerializeField] private string _id;
-
-    [SerializeField] private int _price;
 
     #endregion
 
     #region Properties
-    
-    public ConstructData TargetConstructData {
-        get => _targetConstructData;
-        private set => _targetConstructData = value;
+
+    public ConstructData Data {
+        get => _data;
+        private set => _data = value;
     }
 
     public SpriteRenderer BaseRenderer {
@@ -42,54 +32,22 @@ public class ConstructItem : MonoBehaviour, IStorable {
         get => _headRenderer;
     }
 
-    public TextMeshProUGUI CostText {
-        get => _costText; 
-        set => _costText = value;
-    }
-
-    public Button PurchaseButton {
-        get => _purchaseButton;
-    }
-
-    public string Id {
-        get => _id;
-        set => _id = value;
-    }
-
-    public int Price {
-        get => _price;
-        private set => _price = value;
-    }
-
     #endregion
 
     #region Events
 
-    public UnityEvent<ConstructItem> OnPurchaseConstructItem;
+    public UnityEvent OnInitialized;
 
     #endregion
 
-    public void Start() {
-        TargetConstructData = GameManager.Singleton.Constructor.RandomConstructData();
+    public void Initialize(ConstructData data) {
+        Data = data;
 
-        Price = (int)(TargetConstructData.Cost * (GameManager.Singleton.ShopManager.PriceMultiplier));
-        Debug.Log(GameManager.Singleton.ShopManager.PriceMultiplier);
-        CostText.text = Price.ToString();
+        Cost = Data.Cost;
+
+        BaseRenderer.sprite = Data.Sprites.Base;
+        HeadRenderer.sprite = Data.Sprites.Head;
         
-        BaseRenderer.sprite = TargetConstructData.Sprites.Head;
-        BaseRenderer.sortingOrder = 2;
-
-        HeadRenderer.sprite = TargetConstructData.Sprites.Base;
-        HeadRenderer.sortingOrder = 1;
-        
-        PurchaseButton.onClick.AddListener(() => {
-            OnPurchaseConstructItem.Invoke(this);
-            Debug.Log(GameManager.Singleton.ShopManager.PriceMultiplier);
-        });
-    }
-
-    private void Update() {
-        Price = (int)(TargetConstructData.Cost * (GameManager.Singleton.ShopManager.PriceMultiplier));
-        CostText.text = Price.ToString();
+        OnInitialized?.Invoke();
     }
 }

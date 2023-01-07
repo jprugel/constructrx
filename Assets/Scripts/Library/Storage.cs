@@ -7,7 +7,7 @@ namespace Library.Inventories {
     [Serializable]
     public class Storage<TStorable> : IEnumerable where TStorable : IStorable {
         private int _maximumSize; 
-        [ReadOnly] [SerializeField] private List<TStorable> _storables = new List<TStorable>();
+        [SerializeField] private List<TStorable> _storables = new List<TStorable>();
 
         public delegate void StorageHandler(TStorable storable);
         public event StorageHandler OnStorageUpdate;
