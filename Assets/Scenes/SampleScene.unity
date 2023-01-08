@@ -1973,6 +1973,7 @@ MonoBehaviour:
   _baseRenderer: {fileID: 791569856}
   _headRenderer: {fileID: 272659249}
   _heldData: {fileID: 0}
+  _constructPrefab: {fileID: 1689814298753228975, guid: 1cffc0dc596ab477280de5b11d249c30, type: 3}
 --- !u!114 &1483917030
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1987,6 +1988,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _constructItems:
     _storables: []
+  _currencyCount: 0
 --- !u!1 &1499869351
 GameObject:
   m_ObjectHideFlags: 0

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Constructs;
+using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour {
 
@@ -14,6 +15,8 @@ public class PlayerController : MonoBehaviour {
     [SerializeField] private SpriteRenderer _headRenderer;
 
     [SerializeField] private ConstructData _heldData;
+
+    [SerializeField] private Construct _constructPrefab;
 
     #endregion
 
@@ -36,12 +39,23 @@ public class PlayerController : MonoBehaviour {
         private set => _heldData = value;
     }
 
+    public Construct ConstructPrefab {
+        get => _constructPrefab;
+    }
+
     #endregion
 
     private void Update() {
         Vector2 mousePosition = Input.mousePosition;
         Vector2 worldPosition = Camera.main.ScreenToWorldPoint(mousePosition);
-        transform.position = worldPosition;
+        transform.position = new Vector3(
+            Mathf.Round(worldPosition.x * 2) / 2,
+            Mathf.Round(worldPosition.y * 2) / 2
+        );
+
+        if (Mouse.current.leftButton.isPressed && !ReferenceEquals(HeldData, null)) {
+            PlaceConstruct(HeldData);
+        }
     }
 
     public void UpdateCursor(ConstructData data) {
@@ -49,5 +63,24 @@ public class PlayerController : MonoBehaviour {
         
         BaseRenderer.sprite = HeldData.Sprites.Base;
         HeadRenderer.sprite = HeldData.Sprites.Head;
+    }
+
+    public void ClearCursor() {
+        HeldData = null;
+
+        BaseRenderer.sprite = null;
+        HeadRenderer.sprite = null;
+    }
+
+    public void PlaceConstruct(ConstructData data) {
+        Construct construct = Instantiate(
+            ConstructPrefab,
+            transform.position,
+            Quaternion.identity
+        );
+
+        construct.Initialize(data);
+        
+        ClearCursor();
     }
 }

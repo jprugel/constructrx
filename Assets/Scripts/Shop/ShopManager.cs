@@ -77,6 +77,9 @@ public class ShopManager : MonoBehaviour {
     #region Methods
 
     public void PurchaseItem(Item item) {
+        Debug.Log($"{Player.CurrencyCount} | {item.Cost}");
+        if (!Player.SpendCurrency(item.Cost)) return;
+        
         NumberOfItemsPurchased++;
         PriceModifier = 1 + NumberOfItemsPurchased * PriceCoefficient;
 

@@ -38,11 +38,11 @@ namespace Library.Inventories {
         }
 
         public IEnumerator GetEnumerator() {
-            return new StorageEnumerator<TStorable>(Storables);
+            return new StorageEnumerator(Storables);
         }
 
         #region Storage Enumerator
-        public class StorageEnumerator<TStorable> : IEnumerator {
+        public class StorageEnumerator : IEnumerator {
             public List<TStorable> Storables;
             public int index = -1;
 

@@ -22,6 +22,7 @@ public class Construct : MonoBehaviour {
 
     public ConstructData Base {
         get => _base;
+        private set => _base = value;
     }
 
     public SpriteRenderer BaseRenderer {
@@ -41,17 +42,16 @@ public class Construct : MonoBehaviour {
     
     #endregion Properties
 
-    private void Start() {
-        SetupConstruct();
-    }
+    #region Methods
 
-    private void SetupConstruct() {
-        BaseRenderer.sprite = Base.Sprites.Base;
-        BaseRenderer.sortingOrder = 0;
+    public void Initialize(ConstructData data) {
+        Base = data;
         
+        BaseRenderer.sprite = Base.Sprites.Base;
         HeadRenderer.sprite = Base.Sprites.Head;
-        HeadRenderer.sortingOrder = 1;
 
         Stat = Base.Stat;
     }
+
+    #endregion
 }
