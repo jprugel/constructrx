@@ -8,11 +8,8 @@ public class PlayerUI : MonoBehaviour {
     #region Reference Fields
 
     [Header("References")] 
-    [SerializeField] private Player _player;
+    [SerializeField] private PlayerInventory _playerInventory;
     
-    
-    
-
     #endregion
 
     #region Fields
@@ -23,8 +20,8 @@ public class PlayerUI : MonoBehaviour {
 
     #region Reference Properties
 
-    public Player Player {
-        get => _player;
+    public PlayerInventory PlayerInventory {
+        get => _playerInventory;
     }
 
     #endregion
@@ -38,23 +35,29 @@ public class PlayerUI : MonoBehaviour {
     #endregion
 
     private void OnEnable() {
-
-        Player.ConstructItems.OnStorageUpdate += UpdateUI;
-
+        
+        PlayerInventory.ConstructItems.OnStorageUpdate += UpdateUI;
+        
     }
 
     private void OnDisable() {
-
-        Player.ConstructItems.OnStorageUpdate -= UpdateUI;
+        
+        PlayerInventory.ConstructItems.OnStorageUpdate -= UpdateUI;
 
     }
 
     private void UpdateUI(ConstructItem item) {
+
         foreach (ConstructItem constructItem in ConstructItems) {
+
             if (ReferenceEquals(constructItem.Data, null)) {
+                
                 constructItem.Initialize(item.Data);
                 return;
+
             }
+
         }
+        
     }
 }

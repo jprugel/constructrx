@@ -12,9 +12,12 @@ public class Grab : MonoBehaviour {
     [Header("Local References")] 
     [SerializeField] private Button _grabButton;
     [SerializeField] private ConstructItem _constructItem;
+    [SerializeField] private ConstructCursor _constructCursorPrefab;
 
     [Header("Global References")] 
-    [SerializeField] private PlayerController _playerController;
+    
+    [SerializeField] private Player _player;
+    
 
     #endregion
 
@@ -28,8 +31,12 @@ public class Grab : MonoBehaviour {
         get => _constructItem.Data;
     }
 
-    public PlayerController PlayerController {
-        get => _playerController;
+    public ConstructCursor Cursor {
+        get => _constructCursorPrefab;
+    }
+
+    public Player Player {
+        get => _player;
     }
 
     #endregion
@@ -37,9 +44,14 @@ public class Grab : MonoBehaviour {
     private void Start() {
         
         GrabButton.onClick.AddListener(() => {
+
+            ConstructCursor cursor = Instantiate(
+                Cursor,
+                Player.transform
+            );
             
-            PlayerController.UpdateCursor(ConstructData);
-            
+            cursor.Initialize(ConstructData);
+
         });
         
     }

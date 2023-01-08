@@ -2,85 +2,49 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Constructs;
 using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour {
 
     #region Fields
 
-    [SerializeField] private PlayerUI _playerUI;
-
-    [SerializeField] private SpriteRenderer _baseRenderer;
-    [SerializeField] private SpriteRenderer _headRenderer;
-
-    [SerializeField] private ConstructData _heldData;
-
-    [SerializeField] private Construct _constructPrefab;
+    [SerializeField] private PlayerInput _playerInput;
+    
+    private InputAction _toggleShopAction;
+    [SerializeField] private ShopManager _shopManager;
 
     #endregion
 
     #region Properties
 
-    public PlayerUI PlayerUI {
-        get => _playerUI;
+    public PlayerInput PlayerInput {
+        get => _playerInput;
     }
 
-    public SpriteRenderer BaseRenderer {
-        get => _baseRenderer;
+    public InputAction ToggleShopAction {
+        get => _toggleShopAction;
+        private set => _toggleShopAction = value;
     }
 
-    public SpriteRenderer HeadRenderer {
-        get => _headRenderer;
-    }
-
-    public ConstructData HeldData {
-        get => _heldData;
-        private set => _heldData = value;
-    }
-
-    public Construct ConstructPrefab {
-        get => _constructPrefab;
+    public ShopManager ShopManager {
+        get => _shopManager;
     }
 
     #endregion
 
+    private void Start() {
+
+        ToggleShopAction = PlayerInput.actions["Toggle Shop"];
+
+    }
+
     private void Update() {
-        Vector2 mousePosition = Input.mousePosition;
-        Vector2 worldPosition = Camera.main.ScreenToWorldPoint(mousePosition);
-        transform.position = new Vector3(
-            Mathf.Round(worldPosition.x * 2) / 2,
-            Mathf.Round(worldPosition.y * 2) / 2
-        );
-
-        if (Mouse.current.leftButton.isPressed && !ReferenceEquals(HeldData, null)) {
-            PlaceConstruct(HeldData);
-        }
-    }
-
-    public void UpdateCursor(ConstructData data) {
-        HeldData = data;
         
-        BaseRenderer.sprite = HeldData.Sprites.Base;
-        HeadRenderer.sprite = HeldData.Sprites.Head;
-    }
-
-    public void ClearCursor() {
-        HeldData = null;
-
-        BaseRenderer.sprite = null;
-        HeadRenderer.sprite = null;
-    }
-
-    public void PlaceConstruct(ConstructData data) {
-        Construct construct = Instantiate(
-            ConstructPrefab,
-            transform.position,
-            Quaternion.identity
-        );
-
-        construct.Initialize(data);
+        if (ToggleShopAction.triggered) ToggleShop();
         
-        ClearCursor();
+    }
+
+    private void ToggleShop() {
+        ShopManager.gameObject.SetActive(!ShopManager.gameObject.activeSelf);
     }
 }

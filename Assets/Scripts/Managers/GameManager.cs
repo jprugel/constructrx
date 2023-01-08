@@ -37,7 +37,7 @@ public class GameManager : MonoBehaviour {
     private void Awake() {
         // Checks if _singleton is null, if its not then it destroys this game object.
         if(ReferenceEquals(s_singleton, null)) s_singleton = this;
-        else Destroy(this.gameObject);
+        else Destroy(gameObject);
     }
         
     private void Start() {

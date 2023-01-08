@@ -6,9 +6,9 @@
             "id": "4d8dfa27-3fd1-4582-9d5b-15620ac5b565",
             "actions": [
                 {
-                    "name": "Build Construct",
+                    "name": "Toggle Shop",
                     "type": "Button",
-                    "id": "8a735bb0-53df-4a1b-99a7-93677588c973",
+                    "id": "d5befdeb-390a-41f0-bfdc-bc362508db27",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -18,12 +18,12 @@
             "bindings": [
                 {
                     "name": "",
-                    "id": "fe8f22c8-5f4e-4412-8adc-a0068027c297",
-                    "path": "<Keyboard>/1",
+                    "id": "96eeef78-a4ea-4257-8f6a-cffd3732b2d1",
+                    "path": "<Keyboard>/q",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Build Construct",
+                    "action": "Toggle Shop",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

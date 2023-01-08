@@ -6,8 +6,5 @@ using UnityEngine.Events;
 
 public class Item : MonoBehaviour, IStorable {
     public string Id { get; set; }
-    
     public int Cost { get; set; }
-
-    
 }

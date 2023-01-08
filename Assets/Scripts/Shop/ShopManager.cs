@@ -1,8 +1,6 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Library.Inventories;
+using Unity.VisualScripting;
 using UnityEngine.Events;
 
 public class ShopManager : MonoBehaviour {
@@ -10,7 +8,13 @@ public class ShopManager : MonoBehaviour {
     #region Reference Fields
 
     [Header("References")] 
-    [SerializeField] private Player _player;
+    [SerializeField] private PlayerCurrency _playerCurrency;
+    [SerializeField] private PlayerInventory _playerInventory;
+    
+
+    [SerializeField] private Constructor _constructor;
+
+    [SerializeField] private Canvas _shop;
 
     #endregion
 
@@ -26,8 +30,20 @@ public class ShopManager : MonoBehaviour {
 
     #region Reference Properties
 
-    public Player Player {
-        get => _player;
+    public PlayerCurrency PlayerCurrency {
+        get => _playerCurrency;
+    }
+
+    public PlayerInventory PlayerInventory {
+        get => _playerInventory;
+    }
+
+    public Constructor Constructor {
+        get => _constructor;
+    }
+
+    public Canvas Shop {
+        get => _shop;
     }
 
     #endregion
@@ -62,14 +78,22 @@ public class ShopManager : MonoBehaviour {
 
     #region MonoBehaviour Implementations
 
-    private void Start() {
+    private void OnEnable() {
+        Shop.gameObject.SetActive(true);
+
         PriceModifier = 1 + NumberOfItemsPurchased * PriceCoefficient;
+        
         
         foreach (ConstructItem item in ConstructItems) {
             item.Initialize(
-                GameManager.Singleton.Constructor.RandomConstructData()
+                Constructor.RandomConstructData()
             );
         }
+    }
+
+    private void OnDisable() {
+        if (Shop.IsDestroyed()) return;
+        Shop.gameObject.SetActive(false);
     }
 
     #endregion
@@ -77,14 +101,13 @@ public class ShopManager : MonoBehaviour {
     #region Methods
 
     public void PurchaseItem(Item item) {
-        Debug.Log($"{Player.CurrencyCount} | {item.Cost}");
-        if (!Player.SpendCurrency(item.Cost)) return;
-        
+        if (!PlayerCurrency.SpendCurrency(item.Cost)) return;
+
         NumberOfItemsPurchased++;
         PriceModifier = 1 + NumberOfItemsPurchased * PriceCoefficient;
 
         if (item is ConstructItem) {
-            ConstructItems.TransferStorable(Player.ConstructItems, (ConstructItem) item);
+            ConstructItems.TransferStorable(PlayerInventory.ConstructItems, (ConstructItem) item);
             ConstructItem citem = (ConstructItem)item;
             citem.Initialize(
                 GameManager.Singleton.Constructor.RandomConstructData()

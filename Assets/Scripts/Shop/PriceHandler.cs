@@ -10,14 +10,23 @@ public class PriceHandler : MonoBehaviour {
 
     #region Fields
 
+    [Header("Managers")]
+    [SerializeField] private ShopManager _shopManager;
+    
+    [Header("Item")]
     [SerializeField] private Item _item;
     [SerializeField] private TextMeshProUGUI _costText;
-    [ReadOnly] [SerializeField] private ShopManager _shopManager;
     [SerializeField] private Button _purchaseButton;
+    
+    [SerializeField] private float _totalCost;
 
     #endregion
 
     #region Properties
+
+    public ShopManager ShopManager {
+        get => _shopManager;
+    }
 
     public Item Item {
         get => _item;
@@ -27,33 +36,34 @@ public class PriceHandler : MonoBehaviour {
         get => _costText;
     }
 
-    public ShopManager ShopManager {
-        get => _shopManager;
-        private set => _shopManager = value;
-    }
-
     public Button PurchaseButton {
         get => _purchaseButton;
+    }
+
+    public float TotalCost {
+        get => _totalCost;
+        private set => _totalCost = value;
     }
 
     #endregion
 
     private void Start() {
-        ShopManager = GameManager.Singleton.ShopManager;
-
+        //Simulation
+        TotalCost = Item.Cost * ShopManager.PriceModifier;
+        
+        //Visual
+        CostText.text = $"${TotalCost}";
+        
         PurchaseButton.onClick.AddListener(() => {
             ShopManager.PurchaseItem(Item);
         });
-
-        if (Item is ConstructItem) {
-            ConstructItem item = (ConstructItem)Item;
-            item.OnInitialized.AddListener(() => {
-                CostText.text = $"{(int)(Item.Cost * ShopManager.PriceModifier)}";
-            });
-        }
         
         ShopManager.OnPurchaseEvent.AddListener(() => {
-            CostText.text = $"{(int)(Item.Cost * ShopManager.PriceModifier)}";
+            //Simulation
+            TotalCost = Item.Cost * ShopManager.PriceModifier;
+        
+            //Visual
+            CostText.text = $"${TotalCost}";
         });
     }
 }
